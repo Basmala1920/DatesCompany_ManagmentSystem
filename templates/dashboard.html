@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Future Land Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Future Land</h2>
+        </div>
+        <ul>
+            <li class="active"><a href="{{ url_for('index') }}"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('suppliers') }}"><i class="fa-solid fa-truck"></i> Suppliers</a></li>
+            <li><a href="{{ url_for('shipments') }}"><i class="fa-solid fa-box"></i> Shipments</a></li>
+            <li><a href="{{ url_for('transactions_page') }}"><i class="fa-solid fa-money-bill-transfer"></i> Transactions</a></li>
+            <li><a href="{{ url_for('report') }}"><i class="fa-solid fa-table"></i> Financial Report</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="topbar"><h1>Future Land Analytics</h1></div>
+        <div class="cards">
+            <div class="card"><div><h3>Total Transactions</h3><p>${{ "{:,.0f}".format(total) }}</p></div><i class="fa-solid fa-money-bill"></i></div>
+            <div class="card"><div><h3>Total Suppliers</h3><p>{{ total_suppliers }}</p></div><i class="fa-solid fa-truck"></i></div>
+            <div class="card"><div><h3>Total Assets</h3><p>{{ total_assets }}</p></div><i class="fa-solid fa-building"></i></div>
+            <div class="card"><div><h3>Marketing Budget</h3><p>${{ "{:,.0f}".format(marketing_budget) }}</p></div><i class="fa-solid fa-bullhorn"></i></div>
+        </div>
+        
+        <h3 style="margin: 20px 0; color: #14532d;">Recent Transactions</h3>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Supplier</th><th>Date</th><th>Category</th><th>Amount</th></tr></thead>
+                <tbody>
+                    {% for t in transactions %}
+                    <tr><td>{{ t.Supplier_Name }}</td><td>{{ t.Shipment_Date }}</td><td><span class="badge">{{ t.Category_Name }}</span></td><td>${{ "{:,.0f}".format(t.Amount) }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

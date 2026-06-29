@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Transactions</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Future Land</h2>
+      </div>
+      <ul>
+        <li>
+          <a href="{{ url_for('index') }}"
+            ><i class="fa-solid fa-chart-line"></i> Dashboard</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('suppliers') }}"
+            ><i class="fa-solid fa-truck"></i> Suppliers</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('shipments') }}"
+            ><i class="fa-solid fa-box"></i> Shipments</a
+          >
+        </li>
+        <li class="active">
+          <a href="{{ url_for('transactions_page') }}"
+            ><i class="fa-solid fa-money-bill-transfer"></i> Transactions</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('report') }}"
+            ><i class="fa-solid fa-table"></i> Financial Report</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="main-content">
+      <div class="topbar"><h1>Financial Transactions Ledger</h1></div>
+
+      <div class="form-container">
+        <h3>Insert Transaction Record</h3>
+        <form method="POST" class="supplier-form">
+          <select name="shipment_id" required>
+            <option value="" disabled selected>Link to Shipment ID</option>
+            {% for sh in shipments %}
+            <option value="{{ sh.Shipment_ID }}">
+              Shipment #{{ sh.Shipment_ID }}
+            </option>
+            {% endfor %}
+          </select>
+          <select name="cat_id" required>
+            <option value="" disabled selected>Category</option>
+            {% for c in categories %}
+            <option value="{{ c.Cat_ID }}">{{ c.Category_Name }}</option>
+            {% endfor %}
+          </select>
+          <input type="number" name="amount" placeholder="Amount" required />
+          <select name="currency_code" required>
+            <option value="" disabled selected>Currency</option>
+            {% for cur in currencies %}
+            <option value="{{ cur.Currency_Code }}">
+              {{ cur.Currency_Code }}
+            </option>
+            {% endfor %}
+          </select>
+
+          <input
+            type="text"
+            name="payment_method"
+            placeholder="Payment Method (e.g. Visa)"
+            required
+          />
+          <button type="submit" class="btn-filter">Execute</button>
+        </form>
+      </div>
+
+      <form
+        method="GET"
+        action="{{ url_for('transactions_page') }}"
+        class="controls"
+      >
+        <input
+          type="number"
+          name="amount"
+          id="amountInput"
+          placeholder="Amount greater than..."
+          value="{{ min_amount }}"
+        />
+        <input type="hidden" name="sort" id="sortInput" value="{{ sort_by }}" />
+        <button type="submit" class="btn-filter">Apply</button>
+        <button
+          type="button"
+          class="btn-sort"
+          onclick="submitWithSort('newest')"
+        >
+          Newest
+        </button>
+        <button
+          type="button"
+          class="btn-sort"
+          onclick="submitWithSort('oldest')"
+        >
+          Oldest
+        </button>
+      </form>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Supplier</th>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Method</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in transactions %}
+            <tr>
+              <td>#{{ t.Trans_ID }}</td>
+              <td>{{ t.Supplier_Name }}</td>
+              <td>{{ t.Shipment_Date }}</td>
+              <td><span class="badge">{{ t.Category_Name }}</span></td>
+              <td>{{ t.Payment_Method }}</td>
+              <td><strong>${{ "{:,.0f}".format(t.Amount) }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

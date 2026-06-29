@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Financial Report</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Future Land</h2>
+      </div>
+      <ul>
+        <li>
+          <a href="{{ url_for('index') }}"
+            ><i class="fa-solid fa-chart-line"></i> Dashboard</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('suppliers') }}"
+            ><i class="fa-solid fa-truck"></i> Suppliers</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('shipments') }}"
+            ><i class="fa-solid fa-box"></i> Shipments</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('transactions_page') }}"
+            ><i class="fa-solid fa-money-bill-transfer"></i> Transactions</a
+          >
+        </li>
+        <li class="active">
+          <a href="{{ url_for('report') }}"
+            ><i class="fa-solid fa-table"></i> Financial Report</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <h1>Advanced Financial Analytics</h1>
+      </div>
+
+      <div
+        class="cards-container"
+        style="display: flex; gap: 20px; margin-top: 20px; margin-bottom: 25px"
+      >
+        <div
+          class="card"
+          style="
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            
+          "
+        >
+          <div>
+            <span style="color: #666; font-size: 0.9em; font-weight: bold"
+              >Highest Transaction (MAX)</span
+            >
+            <h2 style="color: #16a34a; margin-top: 5px">
+              ${{ "{:,.2f}".format(highest) }}
+            </h2>
+          </div>
+          <i
+            class="fa-solid fa-arrow-up-trend-line"
+            style="font-size: 2em; color: #16a34a; opacity: 0.3"
+          ></i>
+        </div>
+
+        <div
+          class="card"
+          style="
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+           
+          "
+        >
+          <div>
+            <span style="color: #666; font-size: 0.9em; font-weight: bold"
+              >Lowest Transaction (MIN)</span
+            >
+            <h2 style="color: #dc2626; margin-top: 5px">
+              ${{ "{:,.2f}".format(lowest) }}
+            </h2>
+          </div>
+          <i
+            class="fa-solid fa-arrow-down-trend-line"
+            style="font-size: 2em; color: #dc2626; opacity: 0.3"
+          ></i>
+        </div>
+
+        <div
+          class="card"
+          style="
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            
+          "
+        >
+          <div>
+            <span style="color: #666; font-size: 0.9em; font-weight: bold"
+              >Average Deal Size (AVG)</span
+            >
+            <h2 style="color: #2563eb; margin-top: 5px">
+              ${{ "{:,.2f}".format(average) }}
+            </h2>
+          </div>
+          <i
+            class="fa-solid fa-calculator"
+            style="font-size: 2em; color: #2563eb; opacity: 0"
+          ></i>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <h3 style="color: #422c16; margin-bottom: 15px">
+          <i class="fa-solid fa-chart-pie"></i> Expenses & Income by Category
+          (GROUP BY)
+        </h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Transactions Count</th>
+                <th>Total Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in category_data %}
+              <tr>
+                <td><span class="badge">{{ row.Category_Name }}</span></td>
+                <td>{{ row.Trans_Count }} deals</td>
+                <td>
+                  <strong>${{ "{:,.2f}".format(row.Category_Total) }}</strong>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-container" style="margin-top: 30px">
+        <h3 style="color: #422c16; margin-bottom: 15px">
+          <i class="fa-solid fa-star"></i> Supplier Performance & Volume
+        </h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Supplier Name</th>
+                <th>Type</th>
+                <th>Total Shipments</th>
+                <th>Total Value (AED)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sup in supplier_report %}
+              <tr>
+                <td><strong>{{ sup.Supplier_Name }}</strong></td>
+                <td>
+                  <span style="color: #666; font-size: 0.9em"
+                    >{{ sup.Supplier_Type or 'N/A' }}</span
+                  >
+                </td>
+                <td>{{ sup.Total_Shipments }}</td>
+                <td style="color: #16a34a">
+                  <strong>${{ "{:,.2f}".format(sup.Total_Deals) }}</strong>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shipments</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Future Land</h2>
+      </div>
+      <ul>
+        <li>
+          <a href="{{ url_for('index') }}"
+            ><i class="fa-solid fa-chart-line"></i> Dashboard</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('suppliers') }}"
+            ><i class="fa-solid fa-truck"></i> Suppliers</a
+          >
+        </li>
+        <li class="active">
+          <a href="{{ url_for('shipments') }}"
+            ><i class="fa-solid fa-box"></i> Shipments</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('transactions_page') }}"
+            ><i class="fa-solid fa-money-bill-transfer"></i> Transactions</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('report') }}"
+            ><i class="fa-solid fa-table"></i> Financial Report</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="main-content">
+      <div class="topbar"><h1>Shipments Logistics</h1></div>
+
+      <div class="form-container">
+        <h3>Register New Shipment</h3>
+        <form method="POST" class="supplier-form">
+          <select name="supplier_id" required>
+            <option value="" disabled selected>
+              Select Supplier (Foreign Key)
+            </option>
+            {% for s in suppliers %}
+            <option value="{{ s.Supplier_ID }}">{{ s.Name }}</option>
+            {% endfor %}
+          </select>
+          <input type="date" name="shipment_date" required />
+          <button type="submit" class="btn-filter">Save Shipment</button>
+        </form>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Shipment ID</th>
+              <th>Supplier Mapped</th>
+              <th>Shipment Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sh in shipments %}
+            <tr>
+              <td>#{{ sh.Shipment_ID }}</td>
+              <td>{{ sh.Supplier_Name }}</td>
+              <td>{{ sh.Shipment_Date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

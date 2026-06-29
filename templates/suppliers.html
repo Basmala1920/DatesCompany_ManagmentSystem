@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Suppliers Management</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Future Land</h2>
+      </div>
+      <ul>
+        <li>
+          <a href="{{ url_for('index') }}"
+            ><i class="fa-solid fa-chart-line"></i> Dashboard</a
+          >
+        </li>
+        <li class="active">
+          <a href="{{ url_for('suppliers') }}"
+            ><i class="fa-solid fa-truck"></i> Suppliers</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('shipments') }}"
+            ><i class="fa-solid fa-box"></i> Shipments</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('transactions_page') }}"
+            ><i class="fa-solid fa-money-bill-transfer"></i> Transactions</a
+          >
+        </li>
+        <li>
+          <a href="{{ url_for('report') }}"
+            ><i class="fa-solid fa-table"></i> Financial Report</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="main-content">
+      <div class="topbar"><h1>Suppliers Registry</h1></div>
+
+      <div class="form-container">
+        <h3>Add New Supplier</h3>
+        <form method="POST" class="supplier-form">
+          <input
+            type="text"
+            name="name"
+            placeholder="Supplier Name"
+            required
+            style="width: 70%"
+          />
+          <button type="submit" class="btn-filter">Save</button>
+        </form>
+      </div>
+
+      <form method="GET" class="controls">
+        <input
+          type="text"
+          name="search"
+          placeholder="Search supplier..."
+          value="{{ search }}"
+        />
+        <button type="submit" class="btn-filter">Search</button>
+      </form>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Supplier ID</th>
+              <th>Supplier Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in suppliers %}
+            <tr>
+              <td>#{{ s.Supplier_ID }}</td>
+              <td><strong>{{ s.Name }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
